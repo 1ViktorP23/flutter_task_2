@@ -128,6 +128,9 @@ class ValidationCubit extends Cubit<Validation> {
   }
 
   void passwordValidator(String? value) {
+    if (_isChecked) {
+      _isChecked = false;
+    }
     if (value == null || value.isEmpty) {
       _passwordErrorMessage = "Please enter a password";
       emit(Validation(_isChecked, _emailErrorMessage, _passwordErrorMessage));
