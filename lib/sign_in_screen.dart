@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_task_2/helpers/outline_input_border_extension.dart';
+import 'package:flutter_task_2/helpers/custom_text_field.dart';
+import 'package:flutter_task_2/validation_cubit.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -22,62 +23,30 @@ class SignInScreen extends StatelessWidget {
                     Spacer(),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 32),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 72,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            errorText:
-                                state.isChecked
-                                    ? state.emailErrorMessage
-                                    : null,
-                            filled: true,
-                            fillColor: Colors.white,
-                            floatingLabelBehavior: FloatingLabelBehavior.never,
-                            errorBorder: CustomOutlineBorder.customOutline(),
-                            focusedErrorBorder:
-                                CustomOutlineBorder.customOutline(),
-                            focusedBorder: CustomOutlineBorder.customOutline(),
-                            enabledBorder: CustomOutlineBorder.customOutline(),
-                            labelText: "Email",
-                          ),
-                          onChanged: (value) {
-                            context.read<ValidationCubit>().emailValidator(
-                              value,
-                            );
-                          },
-                        ),
+                      child: CustomTextField(
+                        isPassword: false,
+                        errorText: state.emailErrorMessage,
+                        onChangedText: (value) {
+                          context.read<ValidationCubit>().emailText = value;
+                        },
                       ),
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 72,
-                      child: TextFormField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          errorText:
-                              state.isChecked
-                                  ? state.passwordErrorMessage
-                                  : null,
-                          filled: true,
-                          fillColor: Colors.white,
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          errorBorder: CustomOutlineBorder.customOutline(),
-                          focusedErrorBorder:
-                              CustomOutlineBorder.customOutline(),
-                          focusedBorder: CustomOutlineBorder.customOutline(),
-                          enabledBorder: CustomOutlineBorder.customOutline(),
-                          labelText: "Password",
-                        ),
-                      ),
+                    CustomTextField(
+                      isPassword: true,
+                      errorText: state.passwordErrorMessage,
+                      onChangedText: (value) {
+                        context.read<ValidationCubit>().passwordText = value;
+                      },
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 200, 0, 44),
+                      padding: const EdgeInsets.fromLTRB(0, 160, 0, 44),
                       child: SizedBox(
                         width: double.infinity,
                         height: 48,
                         child: ElevatedButton(
                           onPressed: () {
+                            context.read<ValidationCubit>().emailValidator();
+                            context.read<ValidationCubit>().passwordValidator();
                             context.read<ValidationCubit>().isChecked(true);
                           },
                           child: Text(
@@ -96,80 +65,4 @@ class SignInScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-class ValidationCubit extends Cubit<Validation> {
-  ValidationCubit() : super(Validation(false, "", ""));
-
-  bool _isChecked = false;
-  String _emailErrorMessage = "Please enter an email address";
-  String _passwordErrorMessage = "Please enter a password";
-
-  void isChecked(bool isChecked) {
-    _isChecked = isChecked;
-    return emit(
-      Validation(isChecked, _emailErrorMessage, _passwordErrorMessage),
-    );
-  }
-
-  void emailValidator(String? value) {
-    if (_isChecked) {
-      _isChecked = false;
-    }
-    if (value == null || value.isEmpty) {
-      _emailErrorMessage = "Please enter an email address";
-      emit(Validation(_isChecked, _emailErrorMessage, _passwordErrorMessage));
-    }
-
-    if (!value!.contains('@')) {
-      _emailErrorMessage = "Please enter a valid email address";
-      emit(Validation(_isChecked, _emailErrorMessage, _passwordErrorMessage));
-    }
-  }
-
-  void passwordValidator(String? value) {
-    if (_isChecked) {
-      _isChecked = false;
-    }
-    if (value == null || value.isEmpty) {
-      _passwordErrorMessage = "Please enter a password";
-      emit(Validation(_isChecked, _emailErrorMessage, _passwordErrorMessage));
-    }
-
-    if (value!.length < 8) {
-      _passwordErrorMessage = 'Password must be at least 8 characters';
-      emit(Validation(_isChecked, _emailErrorMessage, _passwordErrorMessage));
-    }
-
-    if (!RegExp(r'[A-Z]').hasMatch(value)) {
-      _passwordErrorMessage =
-          'Password must contain at least one uppercase letter';
-      emit(Validation(_isChecked, _emailErrorMessage, _passwordErrorMessage));
-    }
-
-    if (!RegExp(r'[a-z]').hasMatch(value)) {
-      _passwordErrorMessage =
-          'Password must contain at least one lowercase letter';
-      emit(Validation(_isChecked, _emailErrorMessage, _passwordErrorMessage));
-    }
-
-    if (!RegExp(r'[0-9]').hasMatch(value)) {
-      _passwordErrorMessage = 'Password must contain at least one digit';
-      emit(Validation(_isChecked, _emailErrorMessage, _passwordErrorMessage));
-    }
-
-    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-      _passwordErrorMessage =
-          'Password must contain at least one special symbol';
-      emit(Validation(_isChecked, _emailErrorMessage, _passwordErrorMessage));
-    }
-  }
-}
-
-class Validation {
-  bool isChecked = false;
-  String emailErrorMessage = "error";
-  String passwordErrorMessage = "error";
-
-  Validation(this.isChecked, this.emailErrorMessage, this.passwordErrorMessage);
 }
