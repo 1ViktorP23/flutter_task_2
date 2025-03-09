@@ -6,6 +6,7 @@ class ValidationCubit extends Cubit<Validation> {
   bool _isChecked = false;
   String _emailErrorMessage = "";
   String _passwordErrorMessage = "";
+
   String _emailText = "";
   set emailText(String value) {
     if (_emailText != value) {
@@ -39,10 +40,6 @@ class ValidationCubit extends Cubit<Validation> {
   }
 
   void emailValidator() {
-    if (_isChecked) {
-      _isChecked = false;
-      _emailErrorMessage = "";
-    }
     if (_emailText.isEmpty) {
       _emailErrorMessage = "Please enter an email address";
     } else if (!_emailText.contains('@')) {
@@ -53,11 +50,6 @@ class ValidationCubit extends Cubit<Validation> {
   }
 
   void passwordValidator() {
-    if (_isChecked) {
-      _isChecked = false;
-      _emailErrorMessage = "";
-    }
-
     if (_passwordText.isEmpty) {
       _passwordErrorMessage = "Please enter a password";
     } else if (_passwordText.length < 8) {
