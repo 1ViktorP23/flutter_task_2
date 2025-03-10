@@ -38,7 +38,7 @@ class ValidationCubit extends Cubit<Validation> {
   void emailValidator() {
     if (_emailText.isEmpty) {
       _emailErrorMessage = "Please enter an email address";
-    } else if (!_emailText.contains('@')) {
+    } else if (!RegExp(r'^[\w-]+@[\w-]+\.[a-z]{2,}$').hasMatch(_emailText)) {
       _emailErrorMessage = "Please enter a valid email address";
     } else {
       _emailErrorMessage = "";

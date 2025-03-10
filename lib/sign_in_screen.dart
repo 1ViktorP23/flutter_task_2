@@ -6,8 +6,14 @@ import 'package:flutter_task_2/validation_cubit.dart';
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
 
+  // bool isKeyboardOpen(BuildContext context) {
+  //   return MediaQuery.of(context).viewInsets.bottom > 0;
+  // }
+
   @override
   Widget build(BuildContext context) {
+    bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    double bottomPadding = isKeyboardOpen ? 0 : 44;
     return Scaffold(
       backgroundColor: Colors.cyan,
       body: BlocProvider(
@@ -18,9 +24,8 @@ class SignInScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Spacer(),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 32),
                       child: CustomTextField(
@@ -31,15 +36,18 @@ class SignInScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                    CustomTextField(
-                      isPassword: true,
-                      errorText: state.passwordErrorMessage,
-                      onChangedText: (value) {
-                        context.read<ValidationCubit>().passwordText = value;
-                      },
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 68.0),
+                      child: CustomTextField(
+                        isPassword: true,
+                        errorText: state.passwordErrorMessage,
+                        onChangedText: (value) {
+                          context.read<ValidationCubit>().passwordText = value;
+                        },
+                      ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 160, 0, 44),
+                      padding: EdgeInsets.only(bottom: bottomPadding),
                       child: SizedBox(
                         width: double.infinity,
                         height: 48,

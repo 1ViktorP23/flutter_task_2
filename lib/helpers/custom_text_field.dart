@@ -17,10 +17,11 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 76,
+      height: 92,
       child: TextFormField(
         obscureText: isPassword ? true : false,
         decoration: InputDecoration(
+          errorMaxLines: 2,
           errorText: errorText,
           filled: true,
           fillColor: Colors.white,
