@@ -18,14 +18,14 @@ class SignInScreen extends StatelessWidget {
         create: (_) => ValidationCubit(),
         child: BlocBuilder<ValidationCubit, Validation>(
           builder: (context, state) {
+            double emptySpaceHeight = MediaQuery.of(context).size.height * 0.4;
             return SingleChildScrollView(
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(32.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      SizedBox(height: 400),
+                      SizedBox(height: emptySpaceHeight),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 32),
                         child: CustomTextField(
