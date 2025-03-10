@@ -1,9 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ValidationCubit extends Cubit<Validation> {
-  ValidationCubit() : super(Validation(false, "", "", "", ""));
+  ValidationCubit() : super(Validation("", "", "", ""));
 
-  bool _isChecked = false;
   String _emailErrorMessage = "";
   String _passwordErrorMessage = "";
 
@@ -11,7 +10,7 @@ class ValidationCubit extends Cubit<Validation> {
   set emailText(String value) {
     if (_emailText != value) {
       _emailErrorMessage = "";
-      isChecked(false);
+      onUpdated();
     }
     _emailText = value;
   }
@@ -20,17 +19,14 @@ class ValidationCubit extends Cubit<Validation> {
   set passwordText(String value) {
     if (_passwordText != value) {
       _passwordErrorMessage = "";
-      isChecked(false);
+      onUpdated();
     }
     _passwordText = value;
   }
 
-  void isChecked(bool isChecked) {
-    _isChecked = isChecked;
-
+  void onUpdated() {
     return emit(
       Validation(
-        _isChecked,
         _emailErrorMessage,
         _passwordErrorMessage,
         _emailText,
@@ -72,14 +68,12 @@ class ValidationCubit extends Cubit<Validation> {
 }
 
 class Validation {
-  bool isChecked = false;
   String emailErrorMessage = "error";
   String passwordErrorMessage = "error";
   String emailText = "";
   String passwordText = "";
 
   Validation(
-    this.isChecked,
     this.emailErrorMessage,
     this.passwordErrorMessage,
     this.emailText,

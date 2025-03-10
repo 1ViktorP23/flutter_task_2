@@ -47,7 +47,7 @@ class SignInScreen extends StatelessWidget {
                           onPressed: () {
                             context.read<ValidationCubit>().emailValidator();
                             context.read<ValidationCubit>().passwordValidator();
-                            context.read<ValidationCubit>().isChecked(true);
+                            context.read<ValidationCubit>().onUpdated();
                           },
                           child: Text(
                             "Sing in",
